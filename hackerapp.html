@@ -1,0 +1,1985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacker App | Offensive Cybersecurity</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.96/build/spline-viewer.js"></script>
+     <link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" type="image/png" href="logo.jpg">
+    <link rel="apple-touch-icon" href="logo.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --crimson: #ff1a1a;
+            --crimson-glow: rgba(255, 26, 26, 0.4);
+            --deep-black: #050505;
+            --metallic: #1a1a1a;
+            --glass: rgba(10, 10, 10, 0.7);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--deep-black);
+            color: #ffffff;
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--crimson);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s, opacity 0.3s;
+            mix-blend-mode: difference;
+        }
+
+        .cursor-follower {
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, rgba(255,26,26,0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform 0.3s ease-out;
+        }
+
+        .cursor.hover {
+            transform: scale(2);
+            background: rgba(255, 26, 26, 0.1);
+        }
+
+        /* Typography */
+        .font-orbitron { font-family: 'Orbitron', sans-serif; }
+        .font-rajdhani { font-family: 'Rajdhani', sans-serif; }
+        .font-space { font-family: 'Space Grotesk', sans-serif; }
+
+       
+         .nav-contact {
+    background: linear-gradient(135deg, #ff1a1a, #db2929);
+    color: #fff;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    box-shadow: 0 4px 15px Red(138, 43, 226, 0.4);
+  }
+
+  .nav-contact:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px Red(138, 43, 226, 0.6);
+  }
+
+        .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 8rem 2rem 2rem;
+    min-height: 100vh;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .content {
+    flex: 1 1 45%;
+    max-width: 600px;
+    z-index: 1;
+  }
+
+  .content h1 {
+    font-size: 3.5rem;
+    color: #fff;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+    text-align: left;
+    background: linear-gradient(135deg, #ff1a1a, #db2929);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: none;
+  }
+
+  .content p {
+    font-size: 1.2rem;
+    color: #b8b8b8;
+    text-align: left;
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+  }
+
+  .buttons {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .buttons button {
+    background: transparent;
+    border: 2px solid #ff1a1a;
+    color: #fff;
+    padding: 0.8rem 1.8rem;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  .buttons button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: linear-gradient(135deg, #ff1a1a, #db2929);
+    transition: width 0.3s ease;
+    z-index: -1;
+  }
+
+  .buttons button:hover::before {
+    width: 100%;
+  }
+
+  .buttons button:first-child {
+    background: linear-gradient(135deg, #ff1a1a, #db2929);
+    box-shadow: 0 4px 15px Red(138, 43, 226, 0.4);
+  }
+
+  .buttons button:first-child:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px Red(138, 43, 226, 0.6);
+  }
+
+  .social-icons {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .social-icons a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    background: Red(138, 43, 226, 0.1);
+    border-radius: 50%;
+    color: #ff1a1a;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    border: 1px solid Red(138, 43, 226, 0.3);
+  }
+
+  .social-icons a:hover {
+    background: Red(138, 43, 226, 0.2);
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px Red(138, 43, 226, 0.3);
+  }
+
+  .bg-main-container {
+    flex: 1 1 45%;
+    display: flex;
+    justify-content: flex-end;
+    overflow: visible;
+    max-width: 600px;
+  }
+
+  .bg-main {
+    width: 100%;
+    height: 375px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+
+  spline-viewer {
+    width: 100%;
+    user-select: none;
+    pointer-events: none;
+    height: 500px;
+  }
+
+  .background-elements::before,
+  .background-elements::after {
+    content: "";
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, Red(138, 43, 226, 0.15) 0%, transparent 70%);
+    z-index: 0;
+    pointer-events: none;
+    filter: blur(20px);
+  }
+
+  .background-elements::before {
+    top: 10%;
+    left: 10%;
+  }
+
+  .background-elements::after {
+    bottom: 10%;
+    right: 10%;
+  }
+
+  /* Hamburger Menu */
+  .hamburger {
+    display: none;
+    cursor: pointer;
+    width: 30px;
+    height: 20px;
+    position: relative;
+    z-index: 100;
+  }
+
+  .hamburger span {
+    display: block;
+    position: absolute;
+    height: 3px;
+    width: 100%;
+    background: #ff1a1a;
+    border-radius: 3px;
+    opacity: 1;
+    left: 0;
+    transform: rotate(0deg);
+    transition: all 0.3s ease;
+  }
+
+  .hamburger span:nth-child(1) {
+    top: 0;
+  }
+
+  .hamburger span:nth-child(2),
+  .hamburger span:nth-child(3) {
+    top: 10px;
+  }
+
+  .hamburger span:nth-child(4) {
+    top: 20px;
+  }
+
+  .hamburger.open span:nth-child(1),
+  .hamburger.open span:nth-child(4) {
+    top: 10px;
+    width: 0%;
+    left: 50%;
+  }
+
+  .hamburger.open span:nth-child(2) {
+    transform: rotate(45deg);
+  }
+
+  .hamburger.open span:nth-child(3) {
+    transform: rotate(-45deg);
+  }
+
+  .mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 70%;
+    height: 100vh;
+    background: Red(10, 10, 30, 0.98);
+    backdrop-filter: blur(15px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 2rem;
+    transition: all 0.5s ease;
+    z-index: 99;
+    padding: 5rem 2rem 2rem;
+    border-left: 1px solid Red(138, 43, 226, 0.3);
+    box-shadow: -5px 0 30px rgba(0, 0, 0, 0.3);
+  }
+
+  .mobile-menu.open {
+    right: 0;
+  }
+
+  .mobile-menu a {
+    color: #e0e0e0;
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    position: relative;
+    width: 100%;
+    text-align: center;
+    padding: 0.5rem 0;
+  }
+
+  .mobile-menu a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #ff1a1a;
+    transition: width 0.3s ease;
+  }
+
+  .mobile-menu a:hover {
+    color: #fff;
+  }
+
+  .mobile-menu a:hover::after {
+    width: 100%;
+  }
+
+  .mobile-menu .nav-contact {
+    margin-top: 1rem;
+    width: 80%;
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    font-size: 1.5rem;
+    color: #e0e0e0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .close-btn:hover {
+    color: #ff1a1a;
+    transform: rotate(90deg);
+  }
+
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 98;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  @media (max-width: 992px) {
+    .content h1 {
+      font-size: 2.8rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding-top: 6rem;
+    }
+
+    .bg-main-container,
+    .content {
+      flex: 1 1 100%;
+      width: 100%;
+      max-width: 100%;
+      padding: 0 1rem;
+    }
+
+    .bg-main {
+      width: 100%;
+      height: 238px;
+    }
+
+    spline-viewer {
+        margin-left: 70px;
+      width: 100%;
+      height: 350px;
+
+    }
+    .nav-links {
+      display: none;
+    }
+
+    .nav-contact {
+      display: none;
+    }
+
+    .hamburger {
+      display: block;
+    }
+
+    .buttons {
+      justify-content: center;
+    }
+
+    .social-icons {
+      justify-content: center;
+    }
+
+    .content h1 {
+      font-size: 2.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .content h1 {
+      font-size: 2rem;
+    }
+
+    .content p {
+      font-size: 1rem;
+    }
+
+    .buttons {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .buttons button {
+      width: 100%;
+    }
+
+    spline-viewer {
+      height: 250px;
+    }
+
+    .mobile-menu {
+      width: 85%;
+    }
+
+    .background-elements::before,
+    .background-elements::after {
+      width: 200px;
+      height: 200px;
+    }
+  }
+
+        /* Glow Effects */
+        .glow-text {
+            text-shadow: 0 0 20px rgba(255, 26, 26, 0.5), 0 0 40px rgba(255, 26, 26, 0.3);
+        }
+
+        .glow-border {
+            box-shadow: 0 0 20px rgba(255, 26, 26, 0.3), inset 0 0 20px rgba(255, 26, 26, 0.1);
+        }
+
+        .glow-box {
+            box-shadow: 0 0 30px rgba(255, 26, 26, 0.2), 0 0 60px rgba(255, 26, 26, 0.1);
+        }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(10, 10, 10, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 26, 26, 0.1);
+        }
+
+        .glass-strong {
+            background: rgba(5, 5, 5, 0.85);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 26, 26, 0.15);
+        }
+
+        /* Scanning Lines */
+        .scan-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                transparent 50%,
+                rgba(255, 26, 26, 0.03) 50%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 1000;
+            animation: scan 8s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        /* Particle Canvas */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Hero Canvas */
+        #hero-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        /* Navigation */
+        .nav-link {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--crimson);
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px var(--crimson);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Button Styles */
+        .btn-primary {
+            background: linear-gradient(135deg, #ff1a1a 0%, #cc0000 100%);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 30px rgba(255, 26, 26, 0.5), 0 0 60px rgba(255, 26, 26, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            border: 1px solid rgba(255, 26, 26, 0.5);
+            background: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 26, 26, 0.1);
+            border-color: var(--crimson);
+            box-shadow: 0 0 20px rgba(255, 26, 26, 0.3);
+        }
+
+        /* Service Cards */
+        .service-card {
+            background: linear-gradient(135deg, rgba(20, 20, 20, 0.9) 0%, rgba(10, 10, 10, 0.95) 100%);
+            border: 1px solid rgba(255, 26, 26, 0.2);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, transparent, var(--crimson), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
+        }
+
+        .service-card:hover::before {
+            opacity: 0.5;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--crimson);
+            box-shadow: 0 20px 40px rgba(255, 26, 26, 0.2), 0 0 60px rgba(255, 26, 26, 0.1);
+        }
+
+        .service-card .card-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(255,26,26,0.3) 0%, transparent 70%);
+            transition: all 0.4s ease;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        .service-card:hover .card-glow {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* Stats Counter */
+        .stat-number {
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(180deg, #ffffff 0%, #ff1a1a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Team Cards */
+        .team-card {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(180deg, rgba(20,20,20,0.9) 0%, rgba(5,5,5,0.95) 100%);
+            border: 1px solid rgba(255, 26, 26, 0.15);
+            transition: all 0.4s ease;
+        }
+
+        .team-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--crimson), transparent);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .team-card:hover::after {
+            transform: scaleX(1);
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 26, 26, 0.4);
+            box-shadow: 0 15px 30px rgba(255, 26, 26, 0.15);
+        }
+
+        .team-card img {
+            filter: grayscale(100%) contrast(1.2);
+            transition: all 0.4s ease;
+        }
+
+        .team-card:hover img {
+            filter: grayscale(0%) contrast(1.1);
+        }
+
+        /* Contact Form */
+        .form-input {
+            background: rgba(10, 10, 10, 0.8);
+            border: 1px solid rgba(255, 26, 26, 0.2);
+            transition: all 0.3s ease;
+            color: #fff;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--crimson);
+            box-shadow: 0 0 20px rgba(255, 26, 26, 0.2);
+            background: rgba(20, 20, 20, 0.9);
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Footer */
+        .footer-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--crimson);
+            transition: width 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--crimson);
+        }
+
+        .footer-link:hover::after {
+            width: 100%;
+        }
+
+        /* Social Icons */
+        .social-icon {
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 26, 26, 0.2);
+        }
+
+        .social-icon:hover {
+            background: rgba(255, 26, 26, 0.1);
+            border-color: var(--crimson);
+            box-shadow: 0 0 20px rgba(255, 26, 26, 0.3);
+            transform: translateY(-3px);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--deep-black);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--crimson), #800000);
+            border-radius: 4px;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes rotate-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .animate-pulse-glow {
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        /* Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Matrix Rain Effect */
+        .matrix-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            opacity: 0.05;
+            pointer-events: none;
+        }
+
+        .matrix-column {
+            position: absolute;
+            top: -100%;
+            color: var(--crimson);
+            font-family: 'Orbitron', monospace;
+            font-size: 14px;
+            line-height: 14px;
+            white-space: nowrap;
+            animation: matrix-fall linear infinite;
+        }
+
+        @keyframes matrix-fall {
+            to { transform: translateY(200vh); }
+        }
+
+        /* Glitch Effect */
+        .glitch {
+            position: relative;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch::before {
+            animation: glitch-1 2s infinite linear alternate-reverse;
+            color: #ff0000;
+            z-index: -1;
+        }
+
+        .glitch::after {
+            animation: glitch-2 3s infinite linear alternate-reverse;
+            color: #00ffff;
+            z-index: -2;
+        }
+
+        @keyframes glitch-1 {
+            0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+            20% { clip-path: inset(20% 0 60% 0); transform: translate(-2px, 2px); }
+            40% { clip-path: inset(40% 0 40% 0); transform: translate(2px, -2px); }
+            60% { clip-path: inset(60% 0 20% 0); transform: translate(-2px, 2px); }
+            80% { clip-path: inset(80% 0 0% 0); transform: translate(2px, -2px); }
+        }
+
+        @keyframes glitch-2 {
+            0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+            20% { clip-path: inset(60% 0 20% 0); transform: translate(2px, -2px); }
+            40% { clip-path: inset(40% 0 40% 0); transform: translate(-2px, 2px); }
+            60% { clip-path: inset(20% 0 60% 0); transform: translate(2px, -2px); }
+            80% { clip-path: inset(0% 0 80% 0); transform: translate(-2px, 2px); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .cursor, .cursor-follower {
+                display: none;
+            }
+            body {
+                cursor: auto;
+            }
+        }
+
+        /* parti jdid */
+
+        @media (max-width: 768px) {
+  .hide-mobile {
+    display: none;
+     }
+    }
+
+.hamburger {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+    position: absolute;
+    top: 28px;
+    right: 24px;
+    width: 30px;
+    height: 24px;
+    cursor: pointer;
+    z-index: 1000;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .container {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .content {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 15px;
+  }
+
+  .content h1 {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .content p {
+    text-align: center;
+  }
+
+
+}
+
+   /* parti jdid 2*/
+ @media (max-width: 768px) {
+
+  .bg-main-container {
+    display: none !important;
+  }
+
+}
+ 
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-follower" id="cursor-follower"></div>
+
+    <!-- Scan Lines Overlay -->
+    <div class="scan-lines"></div>
+
+    <!-- Particle Canvas -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-50 glass-strong transition-all duration-300" id="navbar">
+        <div class="w-full px-6 lg:px-12 py-4 flex items-center justify-between">
+            <a href="#" class="font-orbitron text-2xl font-bold tracking-wider flex items-center gap-2">
+                <span class="text-[#ff1a1a] glow-text">HACKER</span>
+                <span class="text-white">APP</span>
+            </a>
+
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#services" class="nav-link font-rajdhani text-sm tracking-widest uppercase text-gray-300 hover:text-white transition-colors">Services</a>
+                <a href="#about" class="nav-link font-rajdhani text-sm tracking-widest uppercase text-gray-300 hover:text-white transition-colors">About</a>
+                <a href="#courses" class="nav-link font-rajdhani text-sm tracking-widest uppercase text-gray-300 hover:text-white transition-colors">Courses</a>
+                <a href="#team" class="nav-link font-rajdhani text-sm tracking-widest uppercase text-gray-300 hover:text-white transition-colors">Team</a>
+                <a href="#contact" class="nav-link font-rajdhani text-sm tracking-widest uppercase text-gray-300 hover:text-white transition-colors">Contact</a>
+            </div>
+
+            <a href="#contact" class="btn-primary hide-mobile px-6 py-2 rounded font-rajdhani text-sm tracking-widest uppercase font-semibold">
+                Start Now
+            </a>
+        </div>
+        
+        <div class="hamburger" onclick="toggleMenu()">
+         <span></span>
+         <span></span>
+         <span></span>
+         <span></span>
+        </div>
+    </nav>
+    
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="close-btn" onclick="toggleMenu()">
+      <i class="fas fa-times"></i>
+    </div>
+    <a href="#services" onclick="toggleMenu()">Services</a>
+      <a href="#about" onclick="toggleMenu()">About</a>
+      <a href="#courses" onclick="toggleMenu()">Courses</a>
+      <a href="#team" onclick="toggleMenu()">Team</a>
+      <a href="#contact" onclick="toggleMenu()">Contact</a>
+  </div>
+    <!-- Hero Section -->
+    <section class="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
+        <canvas id="hero-canvas"></canvas>
+
+        <!-- Matrix Background -->
+        <div class="matrix-bg" id="matrix-bg"></div>
+    
+        <!-- Hero Content -->
+        <div class="relative z-10 text-center px-6 max-w-6xl mx-auto">
+            <div class="mb-6 inline-block">
+                <span class="font-rajdhani text-sm tracking-[0.3em] uppercase text-[#ff1a1a] animate-pulse-glow">
+                    Elite Offensive Security
+                </span>
+            </div>
+
+        <div class="container">
+    <div class="content">
+      <h1>Here we are talking binary</h1>
+      <p>
+        47°21'24"N 8°31'05"E  
+
+        “When silence speaks,
+        only the curious hear.”
+      </p>
+      <div class="buttons">
+        <button><a href="#contact">Get Started</a></button>
+        <button><a href="#about">Learn More</a></button>
+      </div>
+      <div class="social-icons">
+        <a href="https://www.linkedin.com/in/oussama-serrar-671360323/"><i class="fab fa-linkedin"></i></a>
+        <a href="https://www.instagram.com/hackerapp2024/"><i class="fab fa-instagram"></i></a>
+        <a href="https://github.com/oussama-serrar"><i class="fab fa-github"></i></a>
+      </div>
+    </div>
+    <div class="bg-main-container">
+      <div class="bg-main">
+<spline-viewer url="https://prod.spline.design/BoWg-dch2T9e59sl/scene.splinecode"></spline-viewer>
+      </div>
+    </div>
+  </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 opacity-50">
+            <span class="font-rajdhani text-xs tracking-widest uppercase text-gray-500">Scroll</span>
+            <div class="w-px h-12 bg-gradient-to-b from-[#ff1a1a] to-transparent"></div>
+        </div>
+    </section>
+
+    <!-- Trusted By Section -->
+    <section class="relative w-full py-20 overflow-hidden">
+        <div class="w-full px-6 lg:px-12">
+            <div class="text-center mb-16 reveal">
+                <span class="font-rajdhani text-sm tracking-[0.3em] uppercase text-[#ff1a1a]">Trusted By</span>
+                <h2 class="font-orbitron text-3xl md:text-4xl font-bold mt-2">ENTERPRISE PARTNERS</h2>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
+                <div class="glass p-8 rounded flex items-center justify-center hover:border-[#ff1a1a] transition-all duration-300 group reveal">
+                    <div class="font-orbitron text-2xl font-bold text-gray-600 group-hover:text-[#ff1a1a] transition-colors tracking-wider">Cisco</div>
+                </div>
+                <div class="glass p-8 rounded flex items-center justify-center hover:border-[#ff1a1a] transition-all duration-300 group reveal">
+                    <div class="font-orbitron text-2xl font-bold text-gray-600 group-hover:text-[#ff1a1a] transition-colors tracking-wider">EC-council</div>
+                </div>
+                <div class="glass p-8 rounded flex items-center justify-center hover:border-[#ff1a1a] transition-all duration-300 group reveal">
+                    <div class="font-orbitron text-2xl font-bold text-gray-600 group-hover:text-[#ff1a1a] transition-colors tracking-wider">RED Team Leadrs</div>
+                </div>
+                <div class="glass p-8 rounded flex items-center justify-center hover:border-[#ff1a1a] transition-all duration-300 group reveal">
+                    <div class="font-orbitron text-2xl font-bold text-gray-600 group-hover:text-[#ff1a1a] transition-colors tracking-wider">CompTIA</div>
+                </div>
+                <div class="glass p-8 rounded flex items-center justify-center hover:border-[#ff1a1a] transition-all duration-300 group reveal">
+                    <div class="font-orbitron text-2xl font-bold text-gray-600 group-hover:text-[#ff1a1a] transition-colors tracking-wider">IBM</div>
+                </div>
+                <div class="glass p-8 rounded flex items-center justify-center hover:border-[#ff1a1a] transition-all duration-300 group reveal">
+                    <div class="font-orbitron text-2xl font-bold text-gray-600 group-hover:text-[#ff1a1a] transition-colors tracking-wider">AWS</div>
+                </div>
+                <div class="glass p-8 rounded flex items-center justify-center hover:border-[#ff1a1a] transition-all duration-300 group reveal">
+                    <div class="font-orbitron text-2xl font-bold text-gray-600 group-hover:text-[#ff1a1a] transition-colors tracking-wider">Netriders</div>
+                </div>
+                <div class="glass p-8 rounded flex items-center justify-center hover:border-[#ff1a1a] transition-all duration-300 group reveal">
+                    <div class="font-orbitron text-2xl font-bold text-gray-600 group-hover:text-[#ff1a1a] transition-colors tracking-wider">THM</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="relative w-full py-32 overflow-hidden">
+        <div class="w-full px-6 lg:px-12">
+            <div class="text-center mb-20 reveal">
+                <span class="font-rajdhani text-sm tracking-[0.3em] uppercase text-[#ff1a1a]">Capabilities</span>
+                <h2 class="font-orbitron text-4xl md:text-5xl font-bold mt-2 mb-4">OFFENSIVE OPERATIONS</h2>
+                <p class="font-space text-gray-400 max-w-2xl mx-auto">Educational courses in addition to comprehensive cybersecurity services designed to identify, exploit, and eliminate security vulnerabilities before adversaries do.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+                <!-- Red Teaming -->
+                <div class="service-card rounded-lg p-8 reveal">
+                    <div class="card-glow"></div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 rounded-lg bg-gradient-to-br from-[#ff1a1a] to-[#800000] flex items-center justify-center mb-6 glow-box">
+                            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="font-orbitron text-xl font-bold mb-3">Red Teaming</h3>
+                        <p class="font-space text-sm text-gray-400 leading-relaxed">Full-spectrum adversary simulation with real-world attack scenarios to test organizational resilience.</p>
+                    </div>
+                </div>
+
+                <!-- Penetration Testing -->
+                <div class="service-card rounded-lg p-8 reveal">
+                    <div class="card-glow"></div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 rounded-lg bg-gradient-to-br from-[#ff1a1a] to-[#800000] flex items-center justify-center mb-6 glow-box">
+                            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="font-orbitron text-xl font-bold mb-3">Penetration Testing</h3>
+                        <p class="font-space text-sm text-gray-400 leading-relaxed">Methodical vulnerability assessment across networks, applications, and infrastructure with detailed remediation.</p>
+                    </div>
+                </div>
+
+                <!-- Malware Analysis -->
+                <div class="service-card rounded-lg p-8 reveal">
+                    <div class="card-glow"></div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 rounded-lg bg-gradient-to-br from-[#ff1a1a] to-[#800000] flex items-center justify-center mb-6 glow-box">
+                            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="font-orbitron text-xl font-bold mb-3">Malware Analysis</h3>
+                        <p class="font-space text-sm text-gray-400 leading-relaxed">Deep reverse engineering of malicious code to understand behavior, extract indicators, and develop countermeasures.</p>
+                    </div>
+                </div>
+
+                <!-- Threat Intelligence -->
+                <div class="service-card rounded-lg p-8 reveal">
+                    <div class="card-glow"></div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 rounded-lg bg-gradient-to-br from-[#ff1a1a] to-[#800000] flex items-center justify-center mb-6 glow-box">
+                            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="font-orbitron text-xl font-bold mb-3">Threat Intelligence</h3>
+                        <p class="font-space text-sm text-gray-400 leading-relaxed">Proactive threat hunting and intelligence gathering to anticipate attacks before they materialize.</p>
+                    </div>
+                </div>
+
+                <!-- Exploit Development -->
+                <div class="service-card rounded-lg p-8 reveal">
+                    <div class="card-glow"></div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 rounded-lg bg-gradient-to-br from-[#ff1a1a] to-[#800000] flex items-center justify-center mb-6 glow-box">
+                            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                            </svg>
+                        </div>
+                        <h3 class="font-orbitron text-xl font-bold mb-3">Exploit Development</h3>
+                        <p class="font-space text-sm text-gray-400 leading-relaxed">Custom exploit creation for zero-day vulnerabilities and advanced persistent threat simulations.</p>
+                    </div>
+                </div>
+
+                <!-- Adversary Simulation -->
+                <div class="service-card rounded-lg p-8 reveal">
+                    <div class="card-glow"></div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 rounded-lg bg-gradient-to-br from-[#ff1a1a] to-[#800000] flex items-center justify-center mb-6 glow-box">
+                            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="font-orbitron text-xl font-bold mb-3">Our courses</h3>
+                        <p class="font-space text-sm text-gray-400 leading-relaxed">We offer a range of courses to teach ethical hacking and support different skill levels.</p>
+                    </div>
+                </div>
+
+                <!-- Cloud Security -->
+                <div class="service-card rounded-lg p-8 reveal">
+                    <div class="card-glow"></div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 rounded-lg bg-gradient-to-br from-[#ff1a1a] to-[#800000] flex items-center justify-center mb-6 glow-box">
+                            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="font-orbitron text-xl font-bold mb-3">Cloud Security</h3>
+                        <p class="font-space text-sm text-gray-400 leading-relaxed">Comprehensive cloud infrastructure assessment across AWS, Azure, and GCP environments.</p>
+                    </div>
+                </div>
+
+                <!-- Digital Forensics -->
+                <div class="service-card rounded-lg p-8 reveal">
+                    <div class="card-glow"></div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 rounded-lg bg-gradient-to-br from-[#ff1a1a] to-[#800000] flex items-center justify-center mb-6 glow-box">
+                            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="font-orbitron text-xl font-bold mb-3">Digital Forensics</h3>
+                        <p class="font-space text-sm text-gray-400 leading-relaxed">Incident response and forensic analysis to uncover attack timelines, artifacts, and attribution evidence.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="relative w-full py-32 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#ff1a1a]/5 to-transparent"></div>
+
+        <div class="w-full px-6 lg:px-12 relative z-10">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+                <div class="text-center reveal">
+                    <div class="stat-number text-5xl md:text-7xl font-black mb-2" data-target="500">0</div>
+                    <div class="font-rajdhani text-lg tracking-widest uppercase text-gray-400">Security Assessments</div>
+                    <div class="w-16 h-px bg-gradient-to-r from-transparent via-[#ff1a1a] to-transparent mx-auto mt-4"></div>
+                </div>
+
+                <div class="text-center reveal">
+                    <div class="stat-number text-5xl md:text-7xl font-black mb-2" data-target="120">0</div>
+                    <div class="font-rajdhani text-lg tracking-widest uppercase text-gray-400">Enterprise Clients</div>
+                    <div class="w-16 h-px bg-gradient-to-r from-transparent via-[#ff1a1a] to-transparent mx-auto mt-4"></div>
+                </div>
+
+                <div class="text-center reveal">
+                    <div class="stat-number text-5xl md:text-7xl font-black mb-2" data-target="99.9" data-decimal="true">0</div>
+                    <div class="font-rajdhani text-lg tracking-widest uppercase text-gray-400">Detection Accuracy %</div>
+                    <div class="w-16 h-px bg-gradient-to-r from-transparent via-[#ff1a1a] to-transparent mx-auto mt-4"></div>
+                </div>
+
+                <div class="text-center reveal">
+                    <div class="stat-number text-5xl md:text-7xl font-black mb-2" data-target="24">0</div>
+                    <div class="font-rajdhani text-lg tracking-widest uppercase text-gray-400">/7 Threat Monitoring</div>
+                    <div class="w-16 h-px bg-gradient-to-r from-transparent via-[#ff1a1a] to-transparent mx-auto mt-4"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About / Philosophy Section -->
+    <section id="about" class="relative w-full py-32 overflow-hidden">
+        <div class="w-full px-6 lg:px-12">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid lg:grid-cols-2 gap-16 items-center">
+                    <div class="reveal">
+                        <span class="font-rajdhani text-sm tracking-[0.3em] uppercase text-[#ff1a1a]">Philosophy</span>
+                        <h2 class="font-orbitron text-4xl md:text-5xl font-bold mt-4 mb-8 leading-tight">
+                            WE SIMULATE<br>
+                            <span class="text-[#ff1a1a] glow-text">REAL-WORLD</span><br>
+                            ADVERSARIES
+                        </h2>
+                        <p class="font-space text-lg text-gray-400 leading-relaxed mb-6">
+                            Hackerapp is a privacy-focused, decentralized project where we build our own systems; science is our weapon.
+
+We don't just discover vulnerabilities; we demonstrate their impact through controlled attacks that reflect advanced and persistent threat tactics. Every encounter is a thrilling battle, a war game designed to build impenetrable defenses.
+                        </p>
+                        <p class="font-space text-lg text-gray-400 leading-relaxed mb-8">
+                            We do not just find weaknesses, we demonstrate their impact through controlled, sophisticated attacks that mirror the tactics of advanced persistent threats. Every engagement is a war game designed to forge impenetrable defenses.
+                        </p>
+
+                        <div class="flex flex-wrap gap-4">
+                            <div class="flex items-center gap-2">
+                                <div class="w-2 h-2 bg-[#ff1a1a] rounded-full animate-pulse"></div>
+                                <span class="font-rajdhani text-sm tracking-wider uppercase text-gray-300">Military-Grade Precision</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="w-2 h-2 bg-[#ff1a1a] rounded-full animate-pulse"></div>
+                                <span class="font-rajdhani text-sm tracking-wider uppercase text-gray-300">Zero-Day Research</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="w-2 h-2 bg-[#ff1a1a] rounded-full animate-pulse"></div>
+                                <span class="font-rajdhani text-sm tracking-wider uppercase text-gray-300">Adversary TTPs</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative reveal">
+                        <div class="absolute -inset-4 bg-gradient-to-r from-[#ff1a1a]/20 to-transparent rounded-lg blur-xl"></div>
+                        <div class="relative glass-strong rounded-lg p-8 border border-[#ff1a1a]/20">
+                            <div class="font-mono text-sm text-[#ff1a1a] mb-4">
+                                <span class="opacity-50">$</span> ./init_mission --target=enterprise --mode=aggressive
+                            </div>
+                            <div class="space-y-3 font-mono text-xs text-gray-400">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-green-500">[OK]</span>
+                                    <span>Reconnaissance phase initiated</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-green-500">[OK]</span>
+                                    <span>Attack surface mapping complete</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-yellow-500">[!]</span>
+                                    <span>Vulnerability identified: CVE-2024-XXXX</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-[#ff1a1a]">[>>]</span>
+                                    <span>Exploit deployment in progress...</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-green-500">[OK]</span>
+                                    <span>Privilege escalation successful</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-green-500">[OK]</span>
+                                    <span>Lateral movement established</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-[#ff1a1a]">[ALERT]</span>
+                                    <span>Critical data access achieved</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-green-500">[DONE]</span>
+                                    <span>Mission complete. Report generated.</span>
+                                </div>
+                            </div>
+                            <div class="mt-6 pt-6 border-t border-[#ff1a1a]/20">
+                                <div class="flex justify-between items-center text-xs font-mono">
+                                    <span class="text-gray-500">Status: <span class="text-[#ff1a1a]">BREACHED</span></span>
+                                    <span class="text-gray-500">Time: 00:04:32:18</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+      <!-- Courses -->
+    <section id="courses" class="relative w-full py-32 overflow-hidden">
+        <div class="w-full px-6 lg:px-12">
+            <div class="text-center mb-20 reveal">
+                <span class="font-rajdhani text-sm tracking-[0.3em] uppercase text-[#ff1a1a]">The Unit</span>
+                <h2 class="font-orbitron text-4xl md:text-5xl font-bold mt-2">OUR COURSES</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+                <div class="team-card rounded-lg overflow-hidden reveal">
+                    <div class="relative h-80 overflow-hidden">
+                        <img src="ejpt.jpg" alt="Operator" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-6">
+                            <h3 class="font-orbitron text-xl font-bold">EJPT course</h3>
+                            <p class="font-rajdhani text-sm text-[#ff1a1a] tracking-wider uppercase">Pentesting fundamentals</p>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="font-space text-sm text-gray-400">A comprehensive American curriculum for the fundamentals From INE Security of penetration testing(Information gathering , Scaning , Exploit , post exploit , Privilege escalation).</p>
+                    </div>
+                </div>
+
+                <div class="team-card rounded-lg overflow-hidden reveal">
+                    <div class="relative h-80 overflow-hidden">
+                        <img src="bugbounty.jpg" alt="Operator" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-6">
+                            <h3 class="font-orbitron text-xl font-bold">BugBounty</h3>
+                            <p class="font-rajdhani text-sm text-[#ff1a1a] tracking-wider uppercase">Targeting Critical Bug</p>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="font-space text-sm text-gray-400">A comprehensive course on the 10 most dangerous website vulnerabilities such as SQL injection, XSS, and information disclosure....</p>
+                    </div>
+                </div>
+
+                <div class="team-card rounded-lg overflow-hidden reveal">
+                    <div class="relative h-80 overflow-hidden">
+                        <img src="decrypt.jpg" alt="Operator" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-6">
+                            <h3 class="font-orbitron text-xl font-bold">Decrypt Lab</h3>
+                            <p class="font-rajdhani text-sm text-[#ff1a1a] tracking-wider uppercase">Extract the privat key</p>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="font-space text-sm text-gray-400">An advanced course to enhance your skills in encryption, decryption, and CTF solving.</p>
+                    </div>
+                </div>
+
+                <div class="team-card rounded-lg overflow-hidden reveal">
+                    <div class="relative h-80 overflow-hidden">
+                        <img src="Osint.jpg" alt="Operator" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-6">
+                            <h3 class="font-orbitron text-xl font-bold">OSINT</h3>
+                            <p class="font-rajdhani text-sm text-[#ff1a1a] tracking-wider uppercase">Open Source Intelligence</p>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="font-space text-sm text-gray-400">A course specializing in the systematic collection, evaluation, and analysis of publicly available information from open sources, with the aim of producing actionable intelligence.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team" class="relative w-full py-32 overflow-hidden">
+        <div class="w-full px-6 lg:px-12">
+            <div class="text-center mb-20 reveal">
+                <span class="font-rajdhani text-sm tracking-[0.3em] uppercase text-[#ff1a1a]">The Unit</span>
+                <h2 class="font-orbitron text-4xl md:text-5xl font-bold mt-2">TACTICAL OPERATORS</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+                <div class="team-card rounded-lg overflow-hidden reveal">
+                    <div class="relative h-80 overflow-hidden">
+                        <img src="oussa.jpg" alt="Operator" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-6">
+                            <h3 class="font-orbitron text-xl font-bold">Oussama Serrar</h3>
+                            <p class="font-rajdhani text-sm text-[#ff1a1a] tracking-wider uppercase">Leader and Pentester</p>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="font-space text-sm text-gray-400">Owner of the hackerapp page and a student specializing in offensive and defensive cybersecurity. 6 years in offensive operations.</p>
+                    </div>
+                </div>
+
+                <div class="team-card rounded-lg overflow-hidden reveal">
+                    <div class="relative h-80 overflow-hidden">
+                        <img src="mihi.jpg" alt="Operator" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-6">
+                            <h3 class="font-orbitron text-xl font-bold">Mohamed Derardja</h3>
+                            <p class="font-rajdhani text-sm text-[#ff1a1a] tracking-wider uppercase">OpenSource Researcher& Analyst</p>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="font-space text-sm text-gray-400">Information security specialist and open-source intelligence analyst</p>
+                    </div>
+                </div>
+
+                <div class="team-card rounded-lg overflow-hidden reveal">
+                    <div class="relative h-80 overflow-hidden">
+                        <img src="fthi1.jpg" alt="Operator" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-6">
+                            <h3 class="font-orbitron text-xl font-bold">Abdelfatah Djaballah</h3>
+                            <p class="font-rajdhani text-sm text-[#ff1a1a] tracking-wider uppercase">Web Application Security</p>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="font-space text-sm text-gray-400">Programmer and website bug bounty hunter</p>
+                    </div>
+                </div>
+
+                <div class="team-card rounded-lg overflow-hidden reveal">
+                    <div class="relative h-80 overflow-hidden">
+                        <img src="3achori1.jpg" alt="Operator" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-6">
+                            <h3 class="font-orbitron text-xl font-bold">Mohamed Tahar Achouri</h3>
+                            <p class="font-rajdhani text-sm text-[#ff1a1a] tracking-wider uppercase">Specialization in digital forensics</p>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="font-space text-sm text-gray-400">Defensive cybersecurity studies and digital forensics specialization.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="relative w-full py-32 overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute inset-0" style="background-image: radial-gradient(circle at 2px 2px, rgba(255,26,26,0.3) 1px, transparent 0); background-size: 40px 40px;"></div>
+        </div>
+
+        <div class="w-full px-6 lg:px-12 relative z-10">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-16 reveal">
+                    <span class="font-rajdhani text-sm tracking-[0.3em] uppercase text-[#ff1a1a]">Secure Channel</span>
+                    <h2 class="font-orbitron text-4xl md:text-5xl font-bold mt-2">INITIATE CONTACT</h2>
+                    <p class="font-space text-gray-400 mt-4 max-w-xl mx-auto">All communications are encrypted end-to-end. Your inquiry is handled with the highest level of operational security.</p>
+                </div>
+
+                <div class="glass-strong rounded-lg p-8 md:p-12 border border-[#ff1a1a]/20 reveal">
+                    <form id="contactForm" class="space-y-6">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block font-rajdhani text-sm tracking-wider uppercase text-gray-400 mb-2">Codename / Organization</label>
+                                <input id="name" type="text" class="form-input w-full px-4 py-3 rounded font-space" placeholder="Enter identifier">
+                            </div>
+                            <div>
+                                <label class="block font-rajdhani text-sm tracking-wider uppercase text-gray-400 mb-2">Secure Email</label>
+                                <input id="email" type="email" class="form-input w-full px-4 py-3 rounded font-space" placeholder="encrypted@channel.com">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block font-rajdhani text-sm tracking-wider uppercase text-gray-400 mb-2">Operation Type</label>
+                            <select id="services" class="form-input w-full px-4 py-3 rounded font-space">
+                                <option value="">Select mission profile</option>
+                                <option value="red-team">Red Team Engagement</option>
+                                <option value="pentest">Penetration Testing</option>
+                                <option value="adversary">Adversary Simulation</option>
+                                <option value="cloud">Cloud Security Assessment</option>
+                                <option value="forensics">Digital Forensics</option>
+                                <option value="other">Register for our courses</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block font-rajdhani text-sm tracking-wider uppercase text-gray-400 mb-2">Mission Brief</label>
+                            <textarea id = "message" rows="5" class="form-input w-full px-4 py-3 rounded font-space resize-none" placeholder="Describe your security objectives and operational requirements..."></textarea>
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            <input type="checkbox" id="encrypt" class="w-4 h-4 accent-[#ff1a1a] bg-transparent border-[#ff1a1a]">
+                            <label for="encrypt" class="font-space text-sm text-gray-400">Enable quantum-resistant encryption for this transmission</label>
+                        </div>
+
+                        <button type="submit" class="btn-primary w-full py-4 rounded font-orbitron text-sm tracking-widest uppercase font-bold">
+                            Transmit Securely
+                        </button>
+                    </form>
+
+                    <div class="mt-8 pt-8 border-t border-[#ff1a1a]/20 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-mono text-gray-500">
+                        <span>Encryption: AES-256-GCM + RSA-4096</span>
+                        <span>Connection: TLS 1.3 | Certificate Pinning Active</span>
+                        <span>Session ID: <span class="text-[#ff1a1a]">PHNT-7X9K-2024</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="relative w-full py-16 border-t border-[#ff1a1a]/10">
+        <div class="w-full px-6 lg:px-12">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid md:grid-cols-4 gap-12 mb-12">
+                    <div class="md:col-span-2">
+                        <a href="#" class="font-orbitron text-2xl font-bold tracking-wider flex items-center gap-2 mb-4">
+                            <span class="text-[#ff1a1a]">HACKER</span>
+                            <span class="text-white">APP</span>
+                        </a>
+                        <p class="font-space text-sm text-gray-500 max-w-md leading-relaxed">
+                            Elite offensive cybersecurity operations. We think like attackers so you do not have to. Classified clearances available. Discretion guaranteed.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h4 class="font-rajdhani text-sm tracking-widest uppercase text-gray-400 mb-4">Operations</h4>
+                        <ul class="space-y-2">
+                            <li><a href="#services" class="footer-link font-space text-sm text-gray-500">Red Teaming</a></li>
+                            <li><a href="#services" class="footer-link font-space text-sm text-gray-500">Penetration Testing</a></li>
+                            <li><a href="#services" class="footer-link font-space text-sm text-gray-500">Malware Analysis</a></li>
+                            <li><a href="#services" class="footer-link font-space text-sm text-gray-500">Threat Intelligence</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-rajdhani text-sm tracking-widest uppercase text-gray-400 mb-4">Intelligence</h4>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="footer-link font-space text-sm text-gray-500">Research Blog</a></li>
+                            <li><a href="#" class="footer-link font-space text-sm text-gray-500">Threat Reports</a></li>
+                            <li><a href="#" class="footer-link font-space text-sm text-gray-500">CVE Database</a></li>
+                            <li><a href="#" class="footer-link font-space text-sm text-gray-500">Careers</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="border-t border-[#ff1a1a]/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div class="font-mono text-xs text-gray-600">
+                        <span class="text-[#ff1a1a]">[SYSTEM]</span> HACKER APP  SECURITY // ALL RIGHTS RESERVED // 2024
+                    </div>
+
+                    <div class="flex gap-4">
+                        <a href="https://www.instagram.com/hackerapp2024/" class="social-icon w-10 h-10 rounded flex items-center justify-center">
+                            <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M7.75 2C4.574 2 2 4.574 2 7.75v8.5C2 19.426 4.574 22 7.75 22h8.5C19.426 22 22 19.426 22 16.25v-8.5C22 4.574 19.426 2 16.25 2h-8.5zm0 1.8h8.5a3.95 3.95 0 0 1 3.95 3.95v8.5a3.95 3.95 0 0 1-3.95 3.95h-8.5a3.95 3.95 0 0 1-3.95-3.95v-8.5A3.95 3.95 0 0 1 7.75 3.8zm8.95 1.35a.85.85 0 1 0 0 1.7.85.85 0 0 0 0-1.7zM12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 1.8A3.2 3.2 0 1 1 8.8 12 3.2 3.2 0 0 1 12 8.8z"/>
+                            </svg>
+                        </a>
+                        <a href="https://github.com/oussama-serrar" class="social-icon w-10 h-10 rounded flex items-center justify-center">
+                            <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                        </a>
+                        <a href="https://www.linkedin.com/in/oussama-serrar-671360323/" class="social-icon w-10 h-10 rounded flex items-center justify-center">
+                            <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Custom Cursor
+        const cursor = document.getElementById('cursor');
+        const cursorFollower = document.getElementById('cursor-follower');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX - 10 + 'px';
+            cursor.style.top = e.clientY - 10 + 'px';
+
+            setTimeout(() => {
+                cursorFollower.style.left = e.clientX - 20 + 'px';
+                cursorFollower.style.top = e.clientY - 20 + 'px';
+            }, 100);
+        });
+
+        document.querySelectorAll('a, button, .service-card, .team-card').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+
+          function toggleMenu() {
+      const hamburger = document.querySelector('.hamburger');
+      const mobileMenu = document.getElementById('mobileMenu');
+      const overlay = document.getElementById('overlay');
+      
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+      overlay.classList.toggle('active');
+      
+      // Toggle body overflow when menu is open
+      if (mobileMenu.classList.contains('open')) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = '';
+      }
+    }
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+      const mobileMenu = document.getElementById('mobileMenu');
+      const hamburger = document.querySelector('.hamburger');
+      const overlay = document.getElementById('overlay');
+      
+      if (mobileMenu.classList.contains('open') && 
+          !mobileMenu.contains(event.target) && 
+          !hamburger.contains(event.target)) {
+        toggleMenu();
+      }
+    });
+
+        // Particle System
+        const particleCanvas = document.getElementById('particle-canvas');
+        const pCtx = particleCanvas.getContext('2d');
+        let particles = [];
+
+        function resizeParticleCanvas() {
+            particleCanvas.width = window.innerWidth;
+            particleCanvas.height = window.innerHeight;
+        }
+        resizeParticleCanvas();
+        window.addEventListener('resize', resizeParticleCanvas);
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * particleCanvas.width;
+                this.y = Math.random() * particleCanvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.speedY = (Math.random() - 0.5) * 0.5;
+                this.opacity = Math.random() * 0.5 + 0.1;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x < 0 || this.x > particleCanvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > particleCanvas.height) this.speedY *= -1;
+            }
+
+            draw() {
+                pCtx.beginPath();
+                pCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                pCtx.fillStyle = `rgba(255, 26, 26, ${this.opacity})`;
+                pCtx.fill();
+            }
+        }
+
+        for (let i = 0; i < 100; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            pCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+
+            particles.forEach((p, i) => {
+                p.update();
+                p.draw();
+
+                // Connect nearby particles
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = p.x - particles[j].x;
+                    const dy = p.y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 100) {
+                        pCtx.beginPath();
+                        pCtx.moveTo(p.x, p.y);
+                        pCtx.lineTo(particles[j].x, particles[j].y);
+                        pCtx.strokeStyle = `rgba(255, 26, 26, ${0.1 * (1 - dist / 100)})`;
+                        pCtx.lineWidth = 0.5;
+                        pCtx.stroke();
+                    }
+                }
+            });
+
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // Hero 3D Sphere
+        const heroCanvas = document.getElementById('hero-canvas');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: heroCanvas, alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        camera.position.z = 5;
+
+        // Create wireframe sphere
+        const geometry = new THREE.IcosahedronGeometry(2, 2);
+        const material = new THREE.MeshBasicMaterial({
+            color: 0xff1a1a,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.3
+        });
+        const sphere = new THREE.Mesh(geometry, material);
+        scene.add(sphere);
+
+        // Create inner sphere
+        const innerGeometry = new THREE.IcosahedronGeometry(1.5, 1);
+        const innerMaterial = new THREE.MeshBasicMaterial({
+            color: 0x800000,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.2
+        });
+        const innerSphere = new THREE.Mesh(innerGeometry, innerMaterial);
+        scene.add(innerSphere);
+
+        // Create particles around sphere
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 200;
+        const posArray = new Float32Array(particlesCount * 3);
+
+        for (let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 8;
+        }
+
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.02,
+            color: 0xff1a1a,
+            transparent: true,
+            opacity: 0.6
+        });
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+
+        // Mouse interaction
+        let mouseX = 0;
+        let mouseY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+        });
+
+        function animateHero() {
+            requestAnimationFrame(animateHero);
+
+            sphere.rotation.x += 0.002;
+            sphere.rotation.y += 0.003;
+
+            innerSphere.rotation.x -= 0.001;
+            innerSphere.rotation.y -= 0.002;
+
+            particlesMesh.rotation.y += 0.001;
+
+            // Subtle mouse influence
+            sphere.rotation.x += mouseY * 0.001;
+            sphere.rotation.y += mouseX * 0.001;
+
+            renderer.render(scene, camera);
+        }
+        animateHero();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Matrix Rain Effect
+        const matrixBg = document.getElementById('matrix-bg');
+        const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+
+        for (let i = 0; i < 30; i++) {
+            const column = document.createElement('div');
+            column.className = 'matrix-column';
+            column.style.left = `${Math.random() * 100}%`;
+            column.style.animationDuration = `${Math.random() * 10 + 10}s`;
+            column.style.animationDelay = `${Math.random() * 5}s`;
+
+            let text = '';
+            for (let j = 0; j < 50; j++) {
+                text += chars[Math.floor(Math.random() * chars.length)] + '<br>';
+            }
+            column.innerHTML = text;
+            matrixBg.appendChild(column);
+        }
+
+        // Scroll Reveal Animation
+        const revealElements = document.querySelectorAll('.reveal');
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('active');
+                    }, index * 100);
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // Stats Counter Animation
+        const statNumbers = document.querySelectorAll('.stat-number');
+
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const target = parseFloat(entry.target.getAttribute('data-target'));
+                    const isDecimal = entry.target.getAttribute('data-decimal') === 'true';
+                    const duration = 2000;
+                    const start = 0;
+                    const startTime = performance.now();
+
+                    function updateCounter(currentTime) {
+                        const elapsed = currentTime - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        const easeOut = 1 - Math.pow(1 - progress, 3);
+                        const current = start + (target - start) * easeOut;
+
+                        if (isDecimal) {
+                            entry.target.textContent = current.toFixed(1);
+                        } else {
+                            entry.target.textContent = Math.floor(current) + (target > 100 ? '+' : '');
+                        }
+
+                        if (progress < 1) {
+                            requestAnimationFrame(updateCounter);
+                        }
+                    }
+
+                    requestAnimationFrame(updateCounter);
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        statNumbers.forEach(stat => statsObserver.observe(stat));
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        let lastScroll = 0;
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+
+            if (currentScroll > 100) {
+                navbar.style.background = 'rgba(5, 5, 5, 0.95)';
+                navbar.style.backdropFilter = 'blur(30px)';
+            } else {
+                navbar.style.background = 'rgba(5, 5, 5, 0.85)';
+            }
+
+            lastScroll = currentScroll;
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Form submission handler
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const btn = this.querySelector('button[type="submit"]');
+            const originalText = btn.textContent;
+            btn.textContent = 'ENCRYPTING...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                btn.textContent = 'TRANSMISSION COMPLETE';
+                btn.style.background = 'linear-gradient(135deg, #00ff00 0%, #008800 100%)';
+
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                    btn.disabled = false;
+                    this.reset();
+                }, 2000);
+            }, 1500);
+        });
+
+        // Parallax effect for hero
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const heroContent = document.querySelector('.relative.z-10');
+            if (heroContent && scrolled < window.innerHeight) {
+                heroContent.style.transform = `translateY(${scrolled * 0.3}px)`;
+                heroContent.style.opacity = 1 - (scrolled / window.innerHeight) * 0.8;
+            }
+        });
+
+        document
+.getElementById("contactForm")
+.addEventListener("submit", async function(e){
+
+    e.preventDefault();
+
+    const data = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        services: document.getElementById("services").value,
+        message: document.getElementById("message").value
+    };
+
+    await fetch(
+         "https://script.google.com/macros/s/AKfycbwtRcS3fSkLXq228lE-1qM1ijntpnp8mAB6-FqbYMKqMwKCGCHaa8D93xTOg8xsxv-Kjg/exec",
+        {
+            method: "POST",
+            body: JSON.stringify(data)
+        }
+    );
+
+    alert("Message Sent Successfully");
+
+});
+    </script>
+</body>
+</html>
